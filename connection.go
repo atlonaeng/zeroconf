@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"strings"
 
 	"golang.org/x/net/ipv4"
 	"golang.org/x/net/ipv6"
@@ -49,12 +50,14 @@ func joinUdp6Multicast(interfaces []net.Interface) (*ipv6.PacketConn, error) {
 	if len(interfaces) == 0 {
 		interfaces = listMulticastInterfaces()
 	}
-	log.Println("Using multicast interfaces: ", interfaces)
+	// log.Println("Using multicast interfaces: ", interfaces)
 
 	var failedJoins int
 	for _, iface := range interfaces {
 		if err := pkConn.JoinGroup(&iface, &net.UDPAddr{IP: mdnsGroupIPv6}); err != nil {
-			log.Println("Udp6 JoinGroup failed for iface ", iface)
+			if !strings.Contains(iface.Name, "p2p") && !strings.Contains(iface.Name, "awdl") {
+				log.Println("Udp6 JoinGroup failed for iface ", iface)
+			}
 			failedJoins++
 		}
 	}
@@ -80,12 +83,15 @@ func joinUdp4Multicast(interfaces []net.Interface) (*ipv4.PacketConn, error) {
 	if len(interfaces) == 0 {
 		interfaces = listMulticastInterfaces()
 	}
-	log.Println("Using multicast interfaces: ", interfaces)
+	// log.Println("Using multicast interfaces: ", interfaces)
 
 	var failedJoins int
 	for _, iface := range interfaces {
 		if err := pkConn.JoinGroup(&iface, &net.UDPAddr{IP: mdnsGroupIPv4}); err != nil {
-			log.Println("Udp4 JoinGroup failed for iface ", iface)
+			if !strings.Contains(iface.Name, "p2p") && !strings.Contains(iface.Name, "awdl") {
+				log.Println("Udp4 JoinGroup failed for iface ", iface)
+			}
+
 			failedJoins++
 		}
 	}
