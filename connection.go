@@ -55,7 +55,7 @@ func joinUdp6Multicast(interfaces []net.Interface) (*ipv6.PacketConn, error) {
 	var failedJoins int
 	for _, iface := range interfaces {
 		if err := pkConn.JoinGroup(&iface, &net.UDPAddr{IP: mdnsGroupIPv6}); err != nil {
-			if !strings.Contains(iface.Name, "p2p") && !strings.Contains(iface.Name, "awdl") && !strings.Contains(iface.Name, "ppp") {
+			if !strings.Contains(iface.Name, "p2p") && !strings.Contains(iface.Name, "awdl") && !strings.Contains(iface.Name, "ppp") && !strings.Contains(iface.Name, "vboxnet") {
 				log.Println("Udp6 JoinGroup failed for iface ", iface)
 			}
 			failedJoins++
@@ -88,7 +88,7 @@ func joinUdp4Multicast(interfaces []net.Interface) (*ipv4.PacketConn, error) {
 	var failedJoins int
 	for _, iface := range interfaces {
 		if err := pkConn.JoinGroup(&iface, &net.UDPAddr{IP: mdnsGroupIPv4}); err != nil {
-			if !strings.Contains(iface.Name, "p2p") && !strings.Contains(iface.Name, "awdl") && !strings.Contains(iface.Name, "ppp") {
+			if !strings.Contains(iface.Name, "p2p") && !strings.Contains(iface.Name, "awdl") && !strings.Contains(iface.Name, "ppp") && !strings.Contains(iface.Name, "vboxnet") {
 				log.Println("Udp4 JoinGroup failed for iface ", iface)
 			}
 
